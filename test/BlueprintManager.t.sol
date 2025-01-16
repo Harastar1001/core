@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.28;
+pragma solidity 0.8.27;
 
 import {Test, console2} from "forge-std/Test.sol";
 import {BlueprintManager, TokenOp, BlueprintCall, HashLib} from "../src/BlueprintManager.sol";
@@ -187,15 +187,11 @@ contract BlueprintManagerTest is Test {
 
 		// add zero variable so that the compiler will make runtime actually save
 		// these variables and not derive at runtime while the timestamp changes
-
-		//Adding and assigning the block.timestamp to a variable
-
-		uint256 _currentTime = block.timestamp;
 		uint256 zero = noSchedule ? 0 : 1;
 		zero = zero * zero - zero;
-		uint256 start = _currentTime + 1000 + zero;
-		uint256 end = _currentTime + 2000 + zero;
-		uint256 cliff = _currentTime + 1250 + zero;
+		uint256 start = block.timestamp + 1000 + zero;
+		uint256 end = block.timestamp + 2000 + zero;
+		uint256 cliff = block.timestamp + 1250 + zero;
 		console2.log(cliff);
 		bytes memory params = abi.encode(start, end, cliff);
 
@@ -264,7 +260,7 @@ contract BlueprintManagerTest is Test {
 		console2.log("after full deposit the balance is", manager.balanceOf(from, id));
 		assertEq(manager.balanceOf(from, id), 0, "didn't use up all tokens");
 
-		vm.warp(_currentTime + 1000);
+		vm.warp(block.timestamp + 1000);
 
 		redeemMaxLinearCliffVesting(
 			from,
@@ -299,7 +295,7 @@ contract BlueprintManagerTest is Test {
 
 		console2.log("measure:", measureTimestamp);
 		console2.log("cliff:", cliff);
-		console2.log("timestamp:", _currentTime);
+		console2.log("timestamp:", block.timestamp);
 		console2.log("end:", end);
 		console2.log("start:", start);
 

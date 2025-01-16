@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.28;
+pragma solidity 0.8.27;
 
 import { HashLib } from "./libraries/HashLib.sol";
 import { IBlueprint } from "./interfaces/IBlueprint.sol";
@@ -23,30 +23,12 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
 	/// @notice eip-6909 allowance mapping
 	mapping(address => mapping(address => mapping(uint256 => uint256))) public allowance;
 
-	/// @notice Emitted when tokens are minted	
-	event Mint(address indexed to, uint256 indexed id, uint256 amount);
-
-	/// @notice Emitted when tokens are burned
-	event Burn(address indexed from, uint256 indexed id, uint256 amount);
-
-	/// @notice Emitted when tokens are transferred
-	event Transfer(address indexed from, address indexed to, uint256 indexed id, uint256 amount);
-
-	/// @notice Emitted when approval is given
-	event Approval(address indexed owner, address indexed spender, uint256 indexed id, uint256 amount);
-
-	/// @notice Emitted when an operator is set
-	event OperatorSet(address indexed owner, address indexed operator, bool approved);
-
 	function _mint(address to, uint256 id, uint256 amount) internal override {
 		balanceOf[to][id] += amount;
-		emit Mint(to, id, amount);
 	}
 
 	function _burn(address from, uint256 id, uint256 amount) internal override {
-		require(balanceOf[from][id] >= amount, "Insufficient balance");
 		balanceOf[from][id] -= amount;
-		emit Burn(from, id, amount);
 	}
 
 	function _transferFrom(
@@ -57,7 +39,6 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
 	) internal {
 		_burn(from, id, amount);
 		_mint(to, id, amount);
-		emit Transfer(from, to, id, amount);
 	}
 
 	function _decreaseApproval(address sender, uint256 id, uint256 amount) internal {
@@ -101,7 +82,7 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
 		uint256 amount
 	) public virtual returns (bool) {
 		allowance[msg.sender][spender][id] = amount;
-		emit Approval(msg.sender, spender, id, amount);
+
 		return true;
 	}
 
@@ -110,7 +91,7 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
 		bool approved
 	) public virtual returns (bool) {
 		isOperator[msg.sender][operator] = approved;
-		emit OperatorSet(msg.sender, operator, approved);
+
 		return true;
 	}
 
@@ -158,6 +139,7 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
 		bool checkApprovals;
 		address sender = call.sender;
 		if (sender == address(0)) {
+			// no override
 			sender = msg.sender;
 		} else if (sender != msg.sender && !isOperator[sender][msg.sender]) {
 			checkApprovals = true;
