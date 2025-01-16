@@ -1,0 +1,776 @@
+{
+	"compiler": {
+		"version": "0.8.28+commit.7893614a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "AccessDenied",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "BalanceDeltaOverflow",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidChecksum",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NoFlashAccountingActive",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "RealizeAccessDenied",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Approval",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Burn",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Mint",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "operator",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "approved",
+						"type": "bool"
+					}
+				],
+				"name": "OperatorSet",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Transfer",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "allowance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "approve",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "balanceOf",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "ops",
+						"type": "tuple[]"
+					}
+				],
+				"name": "burn",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "burn",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "sender",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "blueprint",
+								"type": "address"
+							},
+							{
+								"internalType": "bytes",
+								"name": "action",
+								"type": "bytes"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "checksum",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct BlueprintCall[]",
+						"name": "calls",
+						"type": "tuple[]"
+					}
+				],
+				"name": "cook",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "realizer",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "sender",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "blueprint",
+								"type": "address"
+							},
+							{
+								"internalType": "bytes",
+								"name": "action",
+								"type": "bytes"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "checksum",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct BlueprintCall[]",
+						"name": "calls",
+						"type": "tuple[]"
+					}
+				],
+				"name": "cook",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "ops",
+						"type": "tuple[]"
+					}
+				],
+				"name": "credit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "credit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "ops",
+						"type": "tuple[]"
+					}
+				],
+				"name": "debit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "debit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "slot",
+						"type": "uint256"
+					}
+				],
+				"name": "exttload",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "isOperator",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "mint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "ops",
+						"type": "tuple[]"
+					}
+				],
+				"name": "mint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "operator",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "approved",
+						"type": "bool"
+					}
+				],
+				"name": "setOperator",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transfer",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transferFrom",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"cook(address,(address,address,bytes,bytes32)[])": {
+					"details": "must either be the party represented in each of these calls,      or an operator of the calls[i].sender",
+					"params": {
+						"calls": "the set of calls to be made"
+					}
+				},
+				"mint(address,(uint256,uint256)[])": {
+					"details": "keep in mind that burning (inverting this action) is only possible       via cook invoked by the user or their operator",
+					"params": {
+						"ops": "the array of Blueprint's token ids and amounts to mint",
+						"to": "the address to mint to"
+					}
+				},
+				"mint(address,uint256,uint256)": {
+					"details": "keep in mind that burning (inverting this action) is only possible       via cook invoked by the user or their operator",
+					"params": {
+						"amount": "the token amount to mint",
+						"to": "the address to mint to",
+						"tokenId": "the Blueprint's token id to mint"
+					}
+				},
+				"transfer(address,uint256,uint256)": {
+					"details": "reverts on failure",
+					"returns": {
+						"_0": "is always true if didn't revert"
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"Approval(address,address,uint256,uint256)": {
+					"notice": "Emitted when approval is given"
+				},
+				"Burn(address,uint256,uint256)": {
+					"notice": "Emitted when tokens are burned"
+				},
+				"Mint(address,uint256,uint256)": {
+					"notice": "Emitted when tokens are minted\t"
+				},
+				"OperatorSet(address,address,bool)": {
+					"notice": "Emitted when an operator is set"
+				},
+				"Transfer(address,address,uint256,uint256)": {
+					"notice": "Emitted when tokens are transferred"
+				}
+			},
+			"kind": "user",
+			"methods": {
+				"allowance(address,address,uint256)": {
+					"notice": "eip-6909 allowance mapping"
+				},
+				"balanceOf(address,uint256)": {
+					"notice": "eip-6909 balance mapping"
+				},
+				"cook(address,(address,address,bytes,bytes32)[])": {
+					"notice": "executes a series of calls to Blueprints"
+				},
+				"isOperator(address,address)": {
+					"notice": "eip-6909 operator mapping"
+				},
+				"mint(address,(uint256,uint256)[])": {
+					"notice": "mints many types of tokens according to the `ops` array"
+				},
+				"mint(address,uint256,uint256)": {
+					"notice": "mints single type tokens according to the TokenOp"
+				},
+				"transfer(address,uint256,uint256)": {
+					"notice": "transfers `amount` of token `id` to `receiver`"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"src/BlueprintManager.sol": "BlueprintManager"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"src/BlueprintManager.sol": {
+			"keccak256": "0x80c0367761b2ff8efe72aedd77a6b741bbd2e4ad97bf2a51df19d2177e03c368",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://8eedde8e02b1c3be219a5078c0203fd97f44902dff3015d1f6baae9e74767026",
+				"dweb:/ipfs/QmUofF8dCG5nsX21Z2cK5EAg4Ao9jx1xv8bhVQuLzebCTL"
+			]
+		},
+		"src/FlashAccounting.sol": {
+			"keccak256": "0xb36e5d86530011ca9be65a10b8669d0d08efe1e8a8d9a3a297dc3f70ce4bbe93",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://fbabcc00070582ab54f4ff37427b55ded992b98d64201fedd63d93ec82635e93",
+				"dweb:/ipfs/QmewxtqaG1SKZcWPRcjJdHETCMEUq95EAjkoybFHsce28v"
+			]
+		},
+		"src/interfaces/IBlueprint.sol": {
+			"keccak256": "0x927ea81bfec023aa790381401ebc76dddb8b5b68d0262a374eb3244fe8794c09",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://ab5f6a15706addef34ff78922befe3966e1c7b1a9f69f6aae115c45b0a9414ea",
+				"dweb:/ipfs/QmXEN8w3nm8JxBmwsnPWYFxPLE2Nr1n5yAJZQUjqS8hoSo"
+			]
+		},
+		"src/interfaces/IBlueprintManager.sol": {
+			"keccak256": "0xcf22c6e33b77074a5393700752b41040098ad4c60a65bfffecf1a86997afbbcb",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://b7b7f76281177df392bcf3851d883f7196ed25379e1ad58165a32f61c72e4682",
+				"dweb:/ipfs/QmYkJMv1gBdmvni42J9pFG5L9Maek55MKgP5QDWz5ASwCj"
+			]
+		},
+		"src/libraries/HashLib.sol": {
+			"keccak256": "0xfbb3c744fc35a8f34923d0ca38d8c7203a335bb47bab684fbf1042cdcbd3eafc",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://78a9e10a4b99a8e208699d14cc554a040fcbe216aefe676e2aa38be92b082e35",
+				"dweb:/ipfs/QmWMMfyRbwexivTv5KaWnXTdzrMWGB4J3jy3PyBJ7HSzLK"
+			]
+		}
+	},
+	"version": 1
+}

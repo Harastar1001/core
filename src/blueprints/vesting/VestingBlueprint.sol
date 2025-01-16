@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+pragma solidity 0.8.28;
 
 import {BasicBlueprint, TokenOp, IBlueprintManager} from "../BasicBlueprint.sol";
 import {gcd} from "../../libraries/Math.sol";
@@ -126,18 +126,17 @@ contract VestingBlueprint is BasicBlueprint {
 		uint256 fillPerBatch,
 		uint256 amount
 	) internal pure returns (TokenOp[] memory) {
-		if (fillPerBatch != 0) {
-			setVestingParams(
-				vestingStruct,
-				batchSize,
-				fillPerBatch
-			);
-			return oneOperationArray(
-				uint256(keccak256(vestingStruct)),
-				amount
-			);
-		} else {
+		if (fillPerBatch == 0) {
 			return zero();
 		}
+		setVestingParams(
+			vestingStruct,
+			batchSize,
+			fillPerBatch
+		);
+		return oneOperationArray(
+			uint256(keccak256(vestingStruct)),
+			amount
+		);
 	}
 }

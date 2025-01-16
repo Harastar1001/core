@@ -1,0 +1,80 @@
+{
+	"compiler": {
+		"version": "0.8.28+commit.7893614a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "BalanceDeltaOverflow",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NoFlashAccountingActive",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "RealizeAccessDenied",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "slot",
+						"type": "uint256"
+					}
+				],
+				"name": "exttload",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"src/FlashAccounting.sol": "FlashAccounting"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"src/FlashAccounting.sol": {
+			"keccak256": "0xb36e5d86530011ca9be65a10b8669d0d08efe1e8a8d9a3a297dc3f70ce4bbe93",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://fbabcc00070582ab54f4ff37427b55ded992b98d64201fedd63d93ec82635e93",
+				"dweb:/ipfs/QmewxtqaG1SKZcWPRcjJdHETCMEUq95EAjkoybFHsce28v"
+			]
+		}
+	},
+	"version": 1
+}
