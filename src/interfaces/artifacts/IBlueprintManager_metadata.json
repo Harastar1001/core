@@ -1,0 +1,173 @@
+{
+	"compiler": {
+		"version": "0.8.28+commit.7893614a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "realizer",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "sender",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "blueprint",
+								"type": "address"
+							},
+							{
+								"internalType": "bytes",
+								"name": "action",
+								"type": "bytes"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "checksum",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct BlueprintCall[]",
+						"name": "calls",
+						"type": "tuple[]"
+					}
+				],
+				"name": "cook",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "mint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "ops",
+						"type": "tuple[]"
+					}
+				],
+				"name": "mint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Czar102",
+			"kind": "dev",
+			"methods": {
+				"cook(address,(address,address,bytes,bytes32)[])": {
+					"details": "must either be the party represented in each of these calls,      or an operator of the calls[i].sender",
+					"params": {
+						"calls": "the set of calls to be made"
+					}
+				},
+				"mint(address,(uint256,uint256)[])": {
+					"details": "keep in mind that burning (inverting this action) is only possible       via cook invoked by the user or their operator",
+					"params": {
+						"ops": "the array of Blueprint's token ids and amounts to mint",
+						"to": "the address to mint to"
+					}
+				},
+				"mint(address,uint256,uint256)": {
+					"details": "keep in mind that burning (inverting this action) is only possible       via cook invoked by the user or their operator",
+					"params": {
+						"amount": "the token amount to mint",
+						"to": "the address to mint to",
+						"tokenId": "the Blueprint's token id to mint"
+					}
+				}
+			},
+			"title": "BlueprintManager's Interface",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"cook(address,(address,address,bytes,bytes32)[])": {
+					"notice": "executes a series of calls to Blueprints"
+				},
+				"mint(address,(uint256,uint256)[])": {
+					"notice": "mints many types of tokens according to the `ops` array"
+				},
+				"mint(address,uint256,uint256)": {
+					"notice": "mints single type tokens according to the TokenOp"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"src/interfaces/IBlueprintManager.sol": "IBlueprintManager"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"src/interfaces/IBlueprintManager.sol": {
+			"keccak256": "0x9cccb804b30eff150981e915348933e8a0d001def03bea418146a6fc480a7895",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://e0c858008ce5db7c6b6d041842937184534f49d1ea75600f11040922fb23c754",
+				"dweb:/ipfs/QmUjFRRjVnvbsLshDkNXZVuUrcrLo2Mu167af2QpbvD5iD"
+			]
+		}
+	},
+	"version": 1
+}

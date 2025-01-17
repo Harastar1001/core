@@ -1,0 +1,53 @@
+{
+	"compiler": {
+		"version": "0.8.28+commit.7893614a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"src/libraries/HashLib.sol": "HashLib"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"src/interfaces/IBlueprintManager.sol": {
+			"keccak256": "0x9cccb804b30eff150981e915348933e8a0d001def03bea418146a6fc480a7895",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://e0c858008ce5db7c6b6d041842937184534f49d1ea75600f11040922fb23c754",
+				"dweb:/ipfs/QmUjFRRjVnvbsLshDkNXZVuUrcrLo2Mu167af2QpbvD5iD"
+			]
+		},
+		"src/libraries/HashLib.sol": {
+			"keccak256": "0xda21929efb42771a81db51346fb57fbf5b02e0753f59334e51b4a5313a1f5b16",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://89a613d9f236574c3ce9906e2d406c1347be4a4d821c0362b81f1b222b1953eb",
+				"dweb:/ipfs/QmNi5CebeCVYGxKD6fqtb7aeyxRwcea41BsYRF81hbtpQT"
+			]
+		}
+	},
+	"version": 1
+}

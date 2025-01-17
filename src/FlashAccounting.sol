@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.24;
+pragma solidity 0.8.28;
 
 // keccak256(MainClue | 0)
 type FlashSession is uint256;
@@ -16,352 +16,334 @@ uint256 constant _2_POW_254 = 1 << 254;
 uint256 constant _96_BIT_FLAG = (1 << 96) - 1;
 
 abstract contract FlashAccounting {
-	function _mint(address to, uint256 id, uint256 amount) internal virtual;
-	function _burn(address from, uint256 id, uint256 amount) internal virtual;
+    function _mint(address to, uint256 id, uint256 amount) internal virtual;
 
-	error BalanceDeltaOverflow();
-	error NoFlashAccountingActive();
-	error RealizeAccessDenied();
+    function _burn(address from, uint256 id, uint256 amount) internal virtual;
 
-	function exttload(uint256 slot) external view returns (uint256 value) {
-		assembly ("memory-safe") {
-			value := tload(slot)
-		}
-	}
+    error BalanceDeltaOverflow();
+    error NoFlashAccountingActive();
+    error RealizeAccessDenied();
 
-	function getCurrentSession() internal view returns (
-		FlashSession session
-	) {
-		address realizer;
-		uint256 mainIndex;
-		assembly ("memory-safe") {
-			let mainClue := tload(0)
-			mainIndex := and(mainClue, _96_BIT_FLAG)
-			realizer := shr(96, mainClue)
-		}
+    function exttload(uint256 slot) external view returns (uint256 value) {
+        assembly ("memory-safe") {
+            value := tload(slot)
+        }
+    }
 
-		if (mainIndex == 0)
-			revert NoFlashAccountingActive();
+    function getCurrentSession() internal view returns (FlashSession session) {
+        address realizer;
+        uint256 mainIndex;
+        assembly ("memory-safe") {
+            let mainClue := tload(0)
+            mainIndex := and(mainClue, _96_BIT_FLAG)
+            realizer := shr(96, mainClue)
+        }
 
-		assembly ("memory-safe") {
-			mstore(0, sub(mainIndex, 1))
-			mstore(0x20, 0)
+        if (mainIndex == 0) revert NoFlashAccountingActive();
 
-			session := keccak256(20, 44)
-		}
+        assembly ("memory-safe") {
+            mstore(0, sub(mainIndex, 1))
+            mstore(0x20, 0)
 
-		if (realizer != address(0) && realizer != msg.sender)
-			revert RealizeAccessDenied();
-	}
+            session := keccak256(20, 44)
+        }
 
-	// authorizedCaller is of type bytes32 so that top bits would be certain to
-	// be clear across Solidity code
-	function openFlashAccounting(address realizer) internal returns (
-		FlashSession session,
-		MainClue mainClue
-	) {
-		assembly ("memory-safe") {
-			mainClue := tload(0)
-			tstore(0, or(shl(96, realizer), add(and(mainClue, _96_BIT_FLAG), 1)))
+        if (realizer != address(0) && realizer != msg.sender)
+            revert RealizeAccessDenied();
+    }
 
-			mstore(0, mainClue)
-			mstore(0x20, 0)
+    // authorizedCaller is of type bytes32 so that top bits would be certain to
+    // be clear across Solidity code
+    function openFlashAccounting(
+        address realizer
+    ) internal returns (FlashSession session, MainClue mainClue) {
+        assembly ("memory-safe") {
+            mainClue := tload(0)
+            tstore(
+                0,
+                or(shl(96, realizer), add(and(mainClue, _96_BIT_FLAG), 1))
+            )
 
-			session := keccak256(20, 44)
-		}
-	}
+            mstore(0, mainClue)
+            mstore(0x20, 0)
 
-	function closeFlashAccounting(
-		MainClue mainClue,
-		FlashSession session
-	) internal {
-		settleSession(session);
+            session := keccak256(20, 44)
+        }
+    }
 
-		assembly ("memory-safe") {
-			tstore(0, mainClue)
-		}
-	}
+    function closeFlashAccounting(
+        MainClue mainClue,
+        FlashSession session
+    ) internal {
+        settleSession(session);
 
-	function getUserSession(
-		FlashSession session,
-		address user
-	) internal pure returns (FlashUserSession userSession) {
-		assembly ("memory-safe") {
-			mstore(0, user)
-			mstore(0x20, session)
+        assembly ("memory-safe") {
+            tstore(0, mainClue)
+        }
+    }
 
-			userSession := keccak256(12, 52)
-		}
-	}
+    function getUserSession(
+        FlashSession session,
+        address user
+    ) internal pure returns (FlashUserSession userSession) {
+        assembly ("memory-safe") {
+            mstore(0, user)
+            mstore(0x20, session)
 
-	function getUserClue(FlashUserSession userSession) internal view returns (UserClue userClue) {
-		assembly {
-			userClue := tload(userSession)
-		}
-	}
+            userSession := keccak256(12, 52)
+        }
+    }
 
-	function initializeUserSession(
-		FlashSession session,
-		address user
-	) internal returns (
-		FlashUserSession userSession,
-		UserClue userClue
-	) {
-		userSession = getUserSession(session, user);
+    function getUserClue(
+        FlashUserSession userSession
+    ) internal view returns (UserClue userClue) {
+        assembly {
+            userClue := tload(userSession)
+        }
+    }
 
-		assembly {
-			userClue := tload(userSession)
+    function initializeUserSession(
+        FlashSession session,
+        address user
+    ) internal returns (FlashUserSession userSession, UserClue userClue) {
+        userSession = getUserSession(session, user);
 
-			if iszero(userClue) {
-				let sessionClue := add(tload(session), 1)
-				tstore(session, sessionClue)
-				// can have dirty top bits but that has no impact
-				tstore(add(session, sessionClue), user)
-			}
-		}
+        assembly {
+            userClue := tload(userSession)
 
-		return (userSession, userClue);
-	}
+            if iszero(userClue) {
+                let sessionClue := add(tload(session), 1)
+                tstore(session, sessionClue)
+                // can have dirty top bits but that has no impact
+                tstore(add(session, sessionClue), user)
+            }
+        }
 
-	// NOTE: mustn't be used when user session is not initialized in the session
-	// NOTE: is dependent on the clue, wrong clue WILL cause the entire system
-	//       to break!
-	// NOTE: it's easy to break the system if someone has accidentally two user
-	//       sessions initialized at once, for example if the sender is the
-	//       blueprint
-	function addUserCreditWithClue(
-		FlashUserSession userSession,
-		UserClue userClue,
-		uint256 id,
-		uint256 amount
-	) internal returns (UserClue) {
-		assembly ("memory-safe") {
-			mstore(0, id)
-			mstore(0x20, userSession)
+        return (userSession, userClue);
+    }
 
-			let deltaSlot := keccak256(0, 0x40)
+    // NOTE: mustn't be used when user session is not initialized in the session
+    // NOTE: is dependent on the clue, wrong clue WILL cause the entire system
+    //       to break!
+    // NOTE: it's easy to break the system if someone has accidentally two user
+    //       sessions initialized at once, for example if the sender is the
+    //       blueprint
+    function addUserCreditWithClue(
+        FlashUserSession userSession,
+        UserClue userClue,
+        uint256 id,
+        uint256 amount
+    ) internal returns (UserClue) {
+        assembly ("memory-safe") {
+            mstore(0, id)
+            mstore(0x20, userSession)
 
-			// Structure: | int255 value | 1 bit extension |
-			let deltaVal := tload(deltaSlot)
+            let deltaSlot := keccak256(0, 0x40)
 
-			let delta := sar(1, deltaVal)
-			let newDelta := add(delta, amount)
+            // Structure: | int255 value | 1 bit extension |
+            let deltaVal := tload(deltaSlot)
 
-			// we'll have a carry if the addition overflows integers or if the
-			// first two bits are 01, which are out of bounds of int255
-			switch or(slt(newDelta, delta), eq(shr(254, newDelta), 1))
-			case 1 {
-				let preDeltaSlot := add(deltaSlot, 1)
-				// if first bits are 01 or 10, the carry is 1, else 2
-				let carry := sub(2, shr(255, add(newDelta, _2_POW_254)))
+            let delta := sar(1, deltaVal)
+            let newDelta := add(delta, amount)
 
-				// ignore preDeltaSlot if there is no extension
-				let preDelta := 0
-				if and(deltaVal, 1) {
-					preDelta := tload(preDeltaSlot)
-				}
-				preDelta := add(preDelta, carry)
+            // we'll have a carry if the addition overflows integers or if the
+            // first two bits are 01, which are out of bounds of int255
+            switch or(slt(newDelta, delta), eq(shr(254, newDelta), 1))
+            case 1 {
+                let preDeltaSlot := add(deltaSlot, 1)
+                // if first bits are 01 or 10, the carry is 1, else 2
+                let carry := sub(2, shr(255, add(newDelta, _2_POW_254)))
 
-				tstore(preDeltaSlot, preDelta)
-				tstore(
-					deltaSlot,
-					or(
-						shl(1, newDelta),
-						iszero(iszero(preDelta))
-					)
-				)
-			}
-			default /*case 0*/ {
-				tstore(
-						deltaSlot,
-						or(
-							shl(1, newDelta),
-							and(deltaVal, 1)
-						)
-					)
-			}
+                // ignore preDeltaSlot if there is no extension
+                let preDelta := 0
+                if and(deltaVal, 1) {
+                    preDelta := tload(preDeltaSlot)
+                }
+                preDelta := add(preDelta, carry)
 
-			// it means we may need to push the token
-			if iszero(deltaVal) {
-				userClue := add(userClue, 1)
-				// we save user clue lazily
-				// tstore(userSession, userClue)
-				tstore(add(userSession, userClue), id)
-			}
-		}
+                tstore(preDeltaSlot, preDelta)
+                tstore(
+                    deltaSlot,
+                    or(shl(1, newDelta), iszero(iszero(preDelta)))
+                )
+            }
+            default /*case 0*/ {
+                tstore(deltaSlot, or(shl(1, newDelta), and(deltaVal, 1)))
+            }
 
-		return userClue;
-	}
+            // it means we may need to push the token
+            if iszero(deltaVal) {
+                userClue := add(userClue, 1)
+                // we save user clue lazily
+                // tstore(userSession, userClue)
+                tstore(add(userSession, userClue), id)
+            }
+        }
 
-	// NOTE: mustn't be used when user session is not initialized in the session
-	// NOTE: is dependent on the clue, wrong clue WILL cause the entire system
-	//       breaking!
-	// NOTE: it's easy to break the system if someone has accidentally two user
-	//       sessions initialized at once, for example if the sender is the
-	//       blueprint
-	function addUserDebitWithClue(
-		FlashUserSession userSession,
-		UserClue userClue,
-		uint256 id,
-		uint256 amount
-	) internal returns (UserClue) {
-		assembly ("memory-safe") {
-			mstore(0, id)
-			mstore(0x20, userSession)
+        return userClue;
+    }
 
-			let deltaSlot := keccak256(0, 0x40)
+    // NOTE: mustn't be used when user session is not initialized in the session
+    // NOTE: is dependent on the clue, wrong clue WILL cause the entire system
+    //       breaking!
+    // NOTE: it's easy to break the system if someone has accidentally two user
+    //       sessions initialized at once, for example if the sender is the
+    //       blueprint
+    function addUserDebitWithClue(
+        FlashUserSession userSession,
+        UserClue userClue,
+        uint256 id,
+        uint256 amount
+    ) internal returns (UserClue) {
+        assembly ("memory-safe") {
+            mstore(0, id)
+            mstore(0x20, userSession)
 
-			// Structure: | int255 value | 1 bit extension |
-			let deltaVal := tload(deltaSlot)
+            let deltaSlot := keccak256(0, 0x40)
 
-			let delta := sar(1, deltaVal)
-			let newDelta := sub(delta, amount)
+            // Structure: | int255 value | 1 bit extension |
+            let deltaVal := tload(deltaSlot)
 
-			// we'll have a carry if the subtraction underflows integers or if
-			// the first two bits are 10, which are out of bounds of int255
-			switch or(slt(delta, newDelta), eq(shr(254, newDelta), 2))
-			case 1 {
-				let preDeltaSlot := add(deltaSlot, 1)
-				// if first bits are 01 or 10, the carry is 1, else 2
-				let carry := sub(2, shr(255, add(newDelta, _2_POW_254)))
+            let delta := sar(1, deltaVal)
+            let newDelta := sub(delta, amount)
 
-				// ignore preDeltaSlot if there is no extension
-				let preDelta := 0
-				if and(deltaVal, 1) {
-					preDelta := tload(preDeltaSlot)
-				}
-				preDelta := sub(preDelta, carry)
+            // we'll have a carry if the subtraction underflows integers or if
+            // the first two bits are 10, which are out of bounds of int255
+            switch or(slt(delta, newDelta), eq(shr(254, newDelta), 2))
+            case 1 {
+                let preDeltaSlot := add(deltaSlot, 1)
+                // if first bits are 01 or 10, the carry is 1, else 2
+                let carry := sub(2, shr(255, add(newDelta, _2_POW_254)))
 
-				tstore(preDeltaSlot, preDelta)
-				tstore(
-					deltaSlot,
-					or(
-						shl(1, newDelta),
-						iszero(iszero(preDelta))
-					)
-				)
-			}
-			default /*case 0*/ {
-				tstore(
-						deltaSlot,
-						or(
-							shl(1, newDelta),
-							and(deltaVal, 1)
-						)
-					)
-			}
+                // ignore preDeltaSlot if there is no extension
+                let preDelta := 0
+                if and(deltaVal, 1) {
+                    preDelta := tload(preDeltaSlot)
+                }
+                preDelta := sub(preDelta, carry)
 
-			// it means we may need to push the token
-			if iszero(deltaVal) {
-				userClue := add(userClue, 1)
-				// we save user clue lazily
-				// tstore(userSession, userClue)
-				tstore(add(userSession, userClue), id)
-			}
-		}
+                tstore(preDeltaSlot, preDelta)
+                tstore(
+                    deltaSlot,
+                    or(shl(1, newDelta), iszero(iszero(preDelta)))
+                )
+            }
+            default /*case 0*/ {
+                tstore(deltaSlot, or(shl(1, newDelta), and(deltaVal, 1)))
+            }
 
-		return userClue;
-	}
+            // it means we may need to push the token
+            if iszero(deltaVal) {
+                userClue := add(userClue, 1)
+                // we save user clue lazily
+                // tstore(userSession, userClue)
+                tstore(add(userSession, userClue), id)
+            }
+        }
 
-	function saveUserClue(FlashUserSession userSession, UserClue userClue) internal {
-		assembly ("memory-safe") {
-			tstore(userSession, userClue)
-		}
-	}
+        return userClue;
+    }
 
-	function settleUserBalances(FlashUserSession userSession, address user) private {
-		UserClue userClue = getUserClue(userSession);
+    function saveUserClue(
+        FlashUserSession userSession,
+        UserClue userClue
+    ) internal {
+        assembly ("memory-safe") {
+            tstore(userSession, userClue)
+        }
+    }
 
-		for (uint256 i = 0; i < UserClue.unwrap(userClue);) {
-			uint256 id;
-			int256 delta;
-			uint256 deltaSlot;
+    function settleUserBalances(
+        FlashUserSession userSession,
+        address user
+    ) private {
+        UserClue userClue = getUserClue(userSession);
 
-			assembly ("memory-safe") {
-				i := add(1, i)
-				id := tload(add(userSession, i))
+        for (uint256 i = 0; i < UserClue.unwrap(userClue); ) {
+            uint256 id;
+            int256 delta;
+            uint256 deltaSlot;
 
-				mstore(0, id)
-				mstore(0x20, userSession)
-				deltaSlot := keccak256(0, 0x40)
+            assembly ("memory-safe") {
+                i := add(1, i)
+                id := tload(add(userSession, i))
 
-				delta := tload(deltaSlot)
-			}
+                mstore(0, id)
+                mstore(0x20, userSession)
+                deltaSlot := keccak256(0, 0x40)
 
-			if (delta == 0)
-				continue;
+                delta := tload(deltaSlot)
+            }
 
-			bool more;
-			assembly ("memory-safe") {
-				more := and(delta, 1)
-				delta := sar(1, delta)
+            if (delta == 0) continue;
 
-				// optimistically clear the delta; this also clears the
-				// extension since it will be ignored if the delta is read
-				tstore(deltaSlot, 0)
-			}
+            bool more;
+            assembly ("memory-safe") {
+                more := and(delta, 1)
+                delta := sar(1, delta)
 
-			unchecked {
-				if (more) {
-					int256 extension;
-					assembly ("memory-safe") {
-						extension := tload(add(deltaSlot, 1))
-					}
+                // optimistically clear the delta; this also clears the
+                // extension since it will be ignored if the delta is read
+                tstore(deltaSlot, 0)
+            }
 
-					if (extension == -2) {
-						if (delta < 0)
-							revert BalanceDeltaOverflow();
-						// burn 2 ** 256 - uint256(delta) tokens
-						_burn(user, id, uint256(-delta));
-					} else if (extension == -1) {
-						_burn(user, id, uint256(-delta) + (1 << 255));
-					} /* else if (extension == 0) {
+            unchecked {
+                if (more) {
+                    int256 extension;
+                    assembly ("memory-safe") {
+                        extension := tload(add(deltaSlot, 1))
+                    }
+
+                    if (extension == -2) {
+                        if (delta < 0) revert BalanceDeltaOverflow();
+                        // burn 2 ** 256 - uint256(delta) tokens
+                        _burn(user, id, uint256(-delta));
+                    } else if (extension == -1) {
+                        _burn(user, id, uint256(-delta) + (1 << 255));
+                    }
+                    /* else if (extension == 0) {
 						// in that case !more, so we won't enter this branch
-					} */ else if (extension == 1) {
-						_mint(user, id, uint256(delta) + (1 << 255));
-					} else if (extension == 2) {
-						if (delta >= 0)
-							revert BalanceDeltaOverflow();
-						// mint 2 ** 256 + delta tokens (delta is negative)
-						_mint(user, id, uint256(delta));
-					} else
-						revert BalanceDeltaOverflow();
-				} else {
-					if (delta < 0)
-						_burn(user, id, uint256(-delta));
-					else
-						_mint(user, id, uint256(delta));
-				}
-			}
-		}
+					} */
+                    else if (extension == 1) {
+                        _mint(user, id, uint256(delta) + (1 << 255));
+                    } else if (extension == 2) {
+                        if (delta >= 0) revert BalanceDeltaOverflow();
+                        // mint 2 ** 256 + delta tokens (delta is negative)
+                        _mint(user, id, uint256(delta));
+                    } else revert BalanceDeltaOverflow();
+                } else {
+                    if (delta < 0) _burn(user, id, uint256(-delta));
+                    else _mint(user, id, uint256(delta));
+                }
+            }
+        }
 
-		assembly ("memory-safe") {
-			// reset the user unsettled token id array
-			tstore(userSession, 0)
-		}
-	}
+        assembly ("memory-safe") {
+            // reset the user unsettled token id array
+            tstore(userSession, 0)
+        }
+    }
 
-	function settleSession(
-		FlashSession session
-	) private {
-		SessionClue sessionClue;
-		assembly ("memory-safe") {
-			sessionClue := tload(session)
-		}
+    function settleSession(FlashSession session) private {
+        SessionClue sessionClue;
+        assembly ("memory-safe") {
+            sessionClue := tload(session)
+        }
 
-		for (uint256 i = 0; i < SessionClue.unwrap(sessionClue);) {
-			address user;
-			assembly ("memory-safe") {
-				i := add(1, i)
-				user := tload(add(session, i))
-			}
+        uint256 len = SessionClue.unwrap(sessionClue);
+        for (uint256 i = 0; i < len; ) {
+            address user;
+            assembly ("memory-safe") {
+                i := add(1, i)
+                user := tload(add(session, i))
+            }
 
-			settleUserBalances(getUserSession(session, user), user);
+            settleUserBalances(getUserSession(session, user), user);
 
-			assembly ("memory-safe") {
-				// reset the session
-				tstore(session, 0)
-			}
-		}
-	}
+            assembly ("memory-safe") {
+                // reset the session
+                tstore(session, 0)
+            }
+        }
+    }
 }

@@ -1,0 +1,158 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"goerli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"blueprintManager()": "fabe109a",
+			"executeAction(bytes)": "a129568d"
+		}
+	},
+	"abi": [
+		{
+			"inputs": [],
+			"name": "AccessDenied",
+			"type": "error"
+		},
+		{
+			"inputs": [],
+			"name": "blueprintManager",
+			"outputs": [
+				{
+					"internalType": "contract IBlueprintManager",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes",
+					"name": "action",
+					"type": "bytes"
+				}
+			],
+			"name": "executeAction",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "uint256",
+							"name": "tokenId",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "amount",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct TokenOp[]",
+					"name": "mint",
+					"type": "tuple[]"
+				},
+				{
+					"components": [
+						{
+							"internalType": "uint256",
+							"name": "tokenId",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "amount",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct TokenOp[]",
+					"name": "burn",
+					"type": "tuple[]"
+				},
+				{
+					"components": [
+						{
+							"internalType": "uint256",
+							"name": "tokenId",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "amount",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct TokenOp[]",
+					"name": "give",
+					"type": "tuple[]"
+				},
+				{
+					"components": [
+						{
+							"internalType": "uint256",
+							"name": "tokenId",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "amount",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct TokenOp[]",
+					"name": "take",
+					"type": "tuple[]"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	]
+}

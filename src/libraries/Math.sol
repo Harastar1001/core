@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+pragma solidity 0.8.28;
 
 // gcd(0, 0) = 0
 function gcd(uint256 a, uint256 b) pure returns (uint256) {

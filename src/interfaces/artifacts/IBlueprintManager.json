@@ -1,0 +1,152 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"goerli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"cook(address,(address,address,bytes,bytes32)[])": "62ba62e5",
+			"mint(address,(uint256,uint256)[])": "f3178dd1",
+			"mint(address,uint256,uint256)": "156e29f6"
+		}
+	},
+	"abi": [
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "realizer",
+					"type": "address"
+				},
+				{
+					"components": [
+						{
+							"internalType": "address",
+							"name": "sender",
+							"type": "address"
+						},
+						{
+							"internalType": "address",
+							"name": "blueprint",
+							"type": "address"
+						},
+						{
+							"internalType": "bytes",
+							"name": "action",
+							"type": "bytes"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "checksum",
+							"type": "bytes32"
+						}
+					],
+					"internalType": "struct BlueprintCall[]",
+					"name": "calls",
+					"type": "tuple[]"
+				}
+			],
+			"name": "cook",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "to",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "tokenId",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "amount",
+					"type": "uint256"
+				}
+			],
+			"name": "mint",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "to",
+					"type": "address"
+				},
+				{
+					"components": [
+						{
+							"internalType": "uint256",
+							"name": "tokenId",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "amount",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct TokenOp[]",
+					"name": "ops",
+					"type": "tuple[]"
+				}
+			],
+			"name": "mint",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	]
+}
