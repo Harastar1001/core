@@ -18,6 +18,8 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
     mapping(address => mapping(address => mapping(uint256 => uint256)))
         public allowance;
 
+    mapping(uint256 => uint256) public tokenStorage; // tokenId => packedData
+
     /// @notice Emitted when tokens are minted
     event Mint(address indexed to, uint256 indexed id, uint256 amount);
 
@@ -48,22 +50,18 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
     );
 
     function _mint(address to, uint256 id, uint256 amount) internal override {
-        uint256[2] storage balance = balanceOf[to][id];
-        balance[0] += amount;
-
-        if (balance[0] <amount){
-            balance[1] += 1;
-        }
+        uint256 packedData = tokenStorage[id];
+        uint256 newAmount = amount + (packedData & ((1 << 255) - 1)); // Extract current amount
+        tokenStorage[id] = (packedData & (1 << 255)) | newAmount; // Update packed data
         emit Mint(to, id, amount);
     }
 
     function _burn(address from, uint256 id, uint256 amount) internal override {
-        uint256[2] storage balance = balanceOf[from][id];
-        require(balance[0] >= amount, "Insufficient balance");
-        balance[0] -= amount;
-        if (balance[0] < amount){
-            balance[1] -= amount;
-        }
+        uint256 packedData = tokenStorage[id];
+        uint256 currentAmount = packedData & ((1 << 255) - 1); // Extract current amount
+        require(currentAmount >= amount, "Insufficient balance");
+        uint256 newAmount = currentAmount - amount;
+        tokenStorage[id] = (packedData & (1 << 255)) | newAmount; // Update packed data
         emit Burn(from, id, amount);
     }
 
@@ -389,5 +387,11 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
                 emit Burn(msg.sender, ops[i].tokenId, ops[i].amount); //Emitting in loops to prevent access denials
             }
         }
+    }
+
+    function updateTokenData(uint256 id, uint256 newAmount) internal {
+        uint256 packedData = tokenStorage[id];
+        // Logic to update the packed data
+        tokenStorage[id] = (packedData & (1 << 255)) | newAmount; // Update packed data
     }
 }
