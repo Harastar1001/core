@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+pragma solidity 0.8.28;
 
 import {BasicBlueprint, TokenOp, IBlueprintManager} from "../BasicBlueprint.sol";
 import {gcd} from "../../libraries/Math.sol";
@@ -8,89 +8,91 @@ import {IVestingSchedule} from "./schedules/IVestingSchedule.sol";
 contract VestingBlueprint is BasicBlueprint {
 	error UnalignedBatchSize();
 
+	struct ActionParams {
+		uint256 tokenId;
+		uint256 amount;
+		uint256 filled;
+		address vestingSchedule;
+		bytes scheduleArgs;
+		uint256 preferredFinalBatch;
+		uint256 desiredFillPerBatch;
+	}
+
 	constructor(IBlueprintManager _blueprintManager)
 		BasicBlueprint(_blueprintManager) {}
 
 	// the onlyManager modifier is removed because it's a pure/view function
-	function executeAction(
-		bytes calldata action
-	) external view returns (
-		TokenOp[] memory /*mint*/,
-		TokenOp[] memory /*burn*/,
-		TokenOp[] memory /*give*/,
-		TokenOp[] memory /*take*/
-	) {
-		(
-			uint256 tokenId,
-			uint256 amount,
-			uint256 filled,
-			address vestingSchedule,
-			bytes memory scheduleArgs,
-			uint256 preferredFinalBatch,
-			uint256 desiredFillPerBatch
-		) = abi.decode(
-			action,
-			(uint256, uint256, uint256, address, bytes, uint256, uint256)
-		);
+function executeAction(
+    bytes calldata action
+) external view returns (
+    TokenOp[] memory /*mint*/,
+    TokenOp[] memory /*burn*/,
+    TokenOp[] memory /*give*/,
+    TokenOp[] memory /*take*/
+) {
+    ActionParams memory params;
+    (
+        params.tokenId,
+        params.amount,
+        params.filled,
+        params.vestingSchedule,
+        params.scheduleArgs,
+        params.preferredFinalBatch,
+        params.desiredFillPerBatch
+    ) = abi.decode(action, (uint256, uint256, uint256, address, bytes, uint256, uint256));
 
-		if (amount == 0)
-			return (zero(), zero(), zero(), zero());
+    if (params.amount == 0)
+        return (zero(), zero(), zero(), zero());
 
-		if (amount % preferredFinalBatch != 0)
-			revert UnalignedBatchSize();
+    if (params.amount % params.preferredFinalBatch != 0)
+        revert UnalignedBatchSize();
 
-		uint256 finalFilled = amount / preferredFinalBatch * desiredFillPerBatch;
-		bool addTokens = finalFilled >= filled;
+    uint256 finalFilled = params.amount / params.preferredFinalBatch * params.desiredFillPerBatch;
+    bool addTokens = finalFilled >= params.filled;
 
-		uint256 initBatchDenom = gcd(amount, filled);
-		// there is only one dynamic array, so using encodePacked() is safe
-		bytes memory vestingStruct = getVestingStruct(
-			tokenId,
-			vestingSchedule,
-			scheduleArgs
-		);
+    uint256 initBatchDenom = gcd(params.amount, params.filled);
+    bytes memory vestingStruct = getVestingStruct(
+        params.tokenId,
+        params.vestingSchedule,
+        params.scheduleArgs
+    );
 
-		TokenOp[] memory burn = getOperation(
-			vestingStruct,
-			amount / initBatchDenom,
-			filled / initBatchDenom,
-			initBatchDenom
-		);
+    TokenOp[] memory burn = getOperation(
+        vestingStruct,
+        params.amount / initBatchDenom,
+        params.filled / initBatchDenom,
+        initBatchDenom
+    );
 
-		if (!addTokens) {
-			// subtraction overflow check prevents vesting schedule misbehavior,
-			// its result exceeding argument will simply cause the action
-			// execution to revert
-			uint256 maxFinalBatch = preferredFinalBatch -
-				IVestingSchedule(vestingSchedule).getVestedTokens(
-					preferredFinalBatch,
-					scheduleArgs
-				);
-			if (maxFinalBatch > desiredFillPerBatch) {
-				desiredFillPerBatch = maxFinalBatch;
-				finalFilled = amount / preferredFinalBatch * desiredFillPerBatch;
-				// we're supposed to be removing tokens, verify it's still the
-				// case, else execute a null action
-				if (finalFilled >= filled)
-					return (zero(), zero(), zero(), zero());
-			}
-		}
+    if (!addTokens) {
+        uint256 maxFinalBatch = params.preferredFinalBatch -
+            IVestingSchedule(params.vestingSchedule).getVestedTokens(
+                params.preferredFinalBatch,
+                params.scheduleArgs
+            );
+        if (maxFinalBatch > params.desiredFillPerBatch) {
+            params.desiredFillPerBatch = maxFinalBatch;
+            finalFilled = params.amount / params.preferredFinalBatch * params.desiredFillPerBatch;
+            if (finalFilled >= params.filled)
+                return (zero(), zero(), zero(), zero());
+        }
+    }
 
-		uint256 finalBatchDenom = gcd(desiredFillPerBatch, preferredFinalBatch);
-		uint256 finalBatchSize = preferredFinalBatch / finalBatchDenom;
-		TokenOp[] memory mint = getOperation(
-			vestingStruct,
-			finalBatchSize,
-			desiredFillPerBatch / finalBatchDenom,
-			amount / finalBatchSize
-		);
+    uint256 finalBatchDenom = gcd(params.desiredFillPerBatch, params.preferredFinalBatch);
+    uint256 finalBatchSize = params.preferredFinalBatch / finalBatchDenom;
+    TokenOp[] memory mint = getOperation(
+        vestingStruct,
+        finalBatchSize,
+        params.desiredFillPerBatch / finalBatchDenom,
+        params.amount / finalBatchSize
+    );
 
-		(TokenOp[] memory give, TokenOp[] memory take) = addTokens ?
-			(zero(), oneOperationArray(tokenId, finalFilled - filled)) :
-			(oneOperationArray(tokenId, filled - finalFilled), zero());
+    (TokenOp[] memory give, TokenOp[] memory take) = addTokens ?
+        (zero(), oneOperationArray(params.tokenId, finalFilled - params.filled)) :
+        (oneOperationArray(params.tokenId, params.filled - finalFilled), zero());
 
-		return (mint, burn, give, take);
-	}
+    return (mint, burn, give, take);
+}
 
 	function getVestingStruct(
 		uint256 tokenId,
