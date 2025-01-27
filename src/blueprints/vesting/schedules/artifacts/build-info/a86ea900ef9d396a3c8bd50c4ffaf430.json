@@ -1,0 +1,279 @@
+{
+	"id": "a86ea900ef9d396a3c8bd50c4ffaf430",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.28",
+	"solcLongVersion": "0.8.28+commit.7893614a",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"src/blueprints/vesting/schedules/IVestingSchedule.sol": {
+				"content": "// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.28;\n\ninterface IVestingSchedule {\n\tfunction getVestedTokens(\n\t\tuint256 amount,\n\t\tbytes calldata scheduleArgs\n\t) external view returns (uint256 unlocked);\n}\n"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": false,
+				"runs": 200
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			},
+			"remappings": [
+				"ds-test/=lib/solmate/lib/ds-test/src/",
+				"forge-std/=lib/forge-std/src/",
+				"solmate/=lib/solmate/src/"
+			]
+		}
+	},
+	"output": {
+		"contracts": {
+			"src/blueprints/vesting/schedules/IVestingSchedule.sol": {
+				"IVestingSchedule": {
+					"abi": [
+						{
+							"inputs": [
+								{
+									"internalType": "uint256",
+									"name": "amount",
+									"type": "uint256"
+								},
+								{
+									"internalType": "bytes",
+									"name": "scheduleArgs",
+									"type": "bytes"
+								}
+							],
+							"name": "getVestedTokens",
+							"outputs": [
+								{
+									"internalType": "uint256",
+									"name": "unlocked",
+									"type": "uint256"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						}
+					],
+					"devdoc": {
+						"kind": "dev",
+						"methods": {},
+						"version": 1
+					},
+					"evm": {
+						"assembly": "",
+						"bytecode": {
+							"functionDebugData": {},
+							"generatedSources": [],
+							"linkReferences": {},
+							"object": "",
+							"opcodes": "",
+							"sourceMap": ""
+						},
+						"deployedBytecode": {
+							"functionDebugData": {},
+							"generatedSources": [],
+							"immutableReferences": {},
+							"linkReferences": {},
+							"object": "",
+							"opcodes": "",
+							"sourceMap": ""
+						},
+						"gasEstimates": null,
+						"legacyAssembly": null,
+						"methodIdentifiers": {
+							"getVestedTokens(uint256,bytes)": "4f2a01e8"
+						}
+					},
+					"metadata": "{\"compiler\":{\"version\":\"0.8.28+commit.7893614a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"scheduleArgs\",\"type\":\"bytes\"}],\"name\":\"getVestedTokens\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"unlocked\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/blueprints/vesting/schedules/IVestingSchedule.sol\":\"IVestingSchedule\"},\"evmVersion\":\"cancun\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[\":ds-test/=lib/solmate/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solmate/=lib/solmate/src/\"]},\"sources\":{\"src/blueprints/vesting/schedules/IVestingSchedule.sol\":{\"keccak256\":\"0x0bee831c670d265938c770dc5f7894a2b49f9b88d5e958078885a48da0ba2523\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://a27864f326105ef12e62243db2be4eab65843b292d0c039f69eadac7e2f4be13\",\"dweb:/ipfs/QmUFMgpC5NfQkjiHXnnLqtaHse8zjjZZL5HHAi6qPVy2pw\"]}},\"version\":1}",
+					"storageLayout": {
+						"storage": [],
+						"types": null
+					},
+					"userdoc": {
+						"kind": "user",
+						"methods": {},
+						"version": 1
+					}
+				}
+			}
+		},
+		"sources": {
+			"src/blueprints/vesting/schedules/IVestingSchedule.sol": {
+				"ast": {
+					"absolutePath": "src/blueprints/vesting/schedules/IVestingSchedule.sol",
+					"exportedSymbols": {
+						"IVestingSchedule": [
+							11
+						]
+					},
+					"id": 12,
+					"license": "UNLICENSED",
+					"nodeType": "SourceUnit",
+					"nodes": [
+						{
+							"id": 1,
+							"literals": [
+								"solidity",
+								"0.8",
+								".28"
+							],
+							"nodeType": "PragmaDirective",
+							"src": "39:23:0"
+						},
+						{
+							"abstract": false,
+							"baseContracts": [],
+							"canonicalName": "IVestingSchedule",
+							"contractDependencies": [],
+							"contractKind": "interface",
+							"fullyImplemented": false,
+							"id": 11,
+							"linearizedBaseContracts": [
+								11
+							],
+							"name": "IVestingSchedule",
+							"nameLocation": "74:16:0",
+							"nodeType": "ContractDefinition",
+							"nodes": [
+								{
+									"functionSelector": "4f2a01e8",
+									"id": 10,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "getVestedTokens",
+									"nameLocation": "103:15:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 6,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 3,
+												"mutability": "mutable",
+												"name": "amount",
+												"nameLocation": "130:6:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 10,
+												"src": "122:14:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint256",
+													"typeString": "uint256"
+												},
+												"typeName": {
+													"id": 2,
+													"name": "uint256",
+													"nodeType": "ElementaryTypeName",
+													"src": "122:7:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint256",
+														"typeString": "uint256"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 5,
+												"mutability": "mutable",
+												"name": "scheduleArgs",
+												"nameLocation": "155:12:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 10,
+												"src": "140:27:0",
+												"stateVariable": false,
+												"storageLocation": "calldata",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bytes_calldata_ptr",
+													"typeString": "bytes"
+												},
+												"typeName": {
+													"id": 4,
+													"name": "bytes",
+													"nodeType": "ElementaryTypeName",
+													"src": "140:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bytes_storage_ptr",
+														"typeString": "bytes"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "118:52:0"
+									},
+									"returnParameters": {
+										"id": 9,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 8,
+												"mutability": "mutable",
+												"name": "unlocked",
+												"nameLocation": "202:8:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 10,
+												"src": "194:16:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint256",
+													"typeString": "uint256"
+												},
+												"typeName": {
+													"id": 7,
+													"name": "uint256",
+													"nodeType": "ElementaryTypeName",
+													"src": "194:7:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint256",
+														"typeString": "uint256"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "193:18:0"
+									},
+									"scope": 11,
+									"src": "94:118:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								}
+							],
+							"scope": 12,
+							"src": "64:150:0",
+							"usedErrors": [],
+							"usedEvents": []
+						}
+					],
+					"src": "39:176:0"
+				},
+				"id": 0
+			}
+		}
+	}
+}

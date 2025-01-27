@@ -139,8 +139,21 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
             realizer
         );
 
+<<<<<<< Updated upstream
         uint256 len = calls.length;
         for (uint256 k = 0; k < len; k++) _flashCook(calls[k], session);
+=======
+	function _executeAction(
+		BlueprintCall calldata call
+	) internal returns (
+		TokenOp[] memory mintOps,
+		TokenOp[] memory burnOps,
+		TokenOp[] memory give,
+		TokenOp[] memory take
+	) {
+		// optimistically ask for execution
+		(mintOps, burnOps, give, take) = IBlueprint(call.blueprint).executeAction(call.action);
+>>>>>>> Stashed changes
 
         closeFlashAccounting(mainClue, session);
     }
@@ -168,14 +181,24 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
             call.action
         );
 
+<<<<<<< Updated upstream
         if (call.checksum != 0) {
             // we read mint, burn, give, take directly from returndata
             bytes32 expected = HashLib.hashActionResults();
+=======
+		(
+			TokenOp[] memory mintOps,
+			TokenOp[] memory burnOps,
+			TokenOp[] memory give,
+			TokenOp[] memory take
+		) = _executeAction(call);
+>>>>>>> Stashed changes
 
             if (call.checksum != expected) revert InvalidChecksum();
         }
     }
 
+<<<<<<< Updated upstream
     function _flashCook(
         BlueprintCall calldata call,
         FlashSession session
@@ -190,6 +213,20 @@ contract BlueprintManager is IBlueprintManager, FlashAccounting {
         } else if (sender != msg.sender && !isOperator[sender][msg.sender]) {
             checkApprovals = true;
         }
+=======
+		for (uint256 i = 0; i < mintOps.length; i++) {
+			senderClue = addUserCreditWithClue(
+				senderSession,
+				senderClue,
+				HashLib.getTokenId(blueprint, mintOps[i].tokenId),
+				mintOps[i].amount
+			);
+		}
+
+		for (uint256 i = 0; i < burnOps.length; i++) {
+			uint256 tokenId = HashLib.getTokenId(blueprint, burnOps[i].tokenId);
+			uint256 amount = burnOps[i].amount;
+>>>>>>> Stashed changes
 
         (
             TokenOp[] memory mint_,

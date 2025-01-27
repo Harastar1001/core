@@ -44,11 +44,42 @@ function executeAction(
     if (params.amount == 0)
         return (zero(), zero(), zero(), zero());
 
+<<<<<<< Updated upstream
     if (params.amount % params.preferredFinalBatch != 0)
         revert UnalignedBatchSize();
 
     uint256 finalFilled = params.amount / params.preferredFinalBatch * params.desiredFillPerBatch;
     bool addTokens = finalFilled >= params.filled;
+=======
+		assembly {
+			//load amount and finalbatch into memory 
+			let _amount := amount
+			let _preffBatch := preferredFinalBatch
+			let remainder := mod(_amount,_preffBatch)
+
+			//if remainder is not zero reert with custom errors
+
+			if remainder {
+				mstore(0x00,0x4e487b71)
+				revert(0x00,0x04)
+			}
+
+		}
+		bool addTokens;
+		uint256 finalFilled;
+
+		assembly {
+			let amt := amount
+			let prefBatch :=  preferredFinalBatch
+			let desFill := desiredFillPerBatch
+			let fin1 := div(amt,prefBatch)
+			let finFilled := finalFilled
+			finFilled := mul(fin1,desFill)
+			let addTkn := addTokens
+			let filled11 := filled
+			addTkn := gt(finFilled,filled11)
+		}
+>>>>>>> Stashed changes
 
     uint256 initBatchDenom = gcd(params.amount, params.filled);
     bytes memory vestingStruct = getVestingStruct(

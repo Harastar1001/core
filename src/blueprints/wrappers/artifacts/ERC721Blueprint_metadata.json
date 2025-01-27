@@ -1,0 +1,245 @@
+{
+	"compiler": {
+		"version": "0.8.28+commit.7893614a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract IBlueprintManager",
+						"name": "manager",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "AccessDenied",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "blueprintManager",
+				"outputs": [
+					{
+						"internalType": "contract IBlueprintManager",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "action",
+						"type": "bytes"
+					}
+				],
+				"name": "executeAction",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "",
+						"type": "tuple[]"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "",
+						"type": "tuple[]"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "",
+						"type": "tuple[]"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenOp[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					}
+				],
+				"name": "onERC721Received",
+				"outputs": [
+					{
+						"internalType": "bytes4",
+						"name": "",
+						"type": "bytes4"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"executeAction(bytes)": {
+					"params": {
+						"action": "a description of the action being taken"
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"executeAction(bytes)": {
+					"notice": "executes an action in Blueprint"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"src/blueprints/wrappers/ERC721Blueprint.sol": "ERC721Blueprint"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": [
+			":ds-test/=lib/solmate/lib/ds-test/src/",
+			":forge-std/=lib/forge-std/src/",
+			":solmate/=lib/solmate/src/"
+		]
+	},
+	"sources": {
+		"lib/solmate/src/tokens/ERC721.sol": {
+			"keccak256": "0x04af19f16f00ba65ae168d6d10da5210dc18da6bcec6974dccf984ba388aa22d",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://098e69f22b67da6927e03203c12ebfda5b0490518f6d9cce7853001ac5ad8403",
+				"dweb:/ipfs/QmYyzfurQe88PsVjRNfutV3gS7Vi68f7zgtVZVtLfd4ViK"
+			]
+		},
+		"src/blueprints/BasicBlueprint.sol": {
+			"keccak256": "0xcfd93fde1f9611cd1cbe4621d78e73ce1f037784e8ba0bca340213d4b75455ec",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://a6c2507efc773918848a465e6ebef16d4ef9ab2e4a61eb5bfdea06e7267a40ac",
+				"dweb:/ipfs/QmS8WEURQs5RURzYcA6dhRF675NAtDHL6vhjbsb55we1ek"
+			]
+		},
+		"src/blueprints/wrappers/ERC721Blueprint.sol": {
+			"keccak256": "0xd154451d0514c8120321f34360757e18b033f296b3c7813dbec253f2f82db6e8",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://79a06330295117bad2cdd286720f617eff3e03e9bd077441d6df2ba2ef90f840",
+				"dweb:/ipfs/QmPesgoNTAGLLiSic7Gkgi3czhqYFQuHA2gmxKBFDkECPJ"
+			]
+		},
+		"src/interfaces/IBlueprint.sol": {
+			"keccak256": "0x402af28fa9618652cbf3ccba43fa3f105f6507afb56f5693a94a20ff8ee3dd09",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://c9aa4a8c9f694b980b2bbe595ef3c5482ce7e85aff33c465017d8a94b17c6b31",
+				"dweb:/ipfs/QmVTdABvwkaufoUDy6nw7bskA1rH4rRgmx7WWEQFUC2t2T"
+			]
+		},
+		"src/interfaces/IBlueprintManager.sol": {
+			"keccak256": "0x9cccb804b30eff150981e915348933e8a0d001def03bea418146a6fc480a7895",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://e0c858008ce5db7c6b6d041842937184534f49d1ea75600f11040922fb23c754",
+				"dweb:/ipfs/QmUjFRRjVnvbsLshDkNXZVuUrcrLo2Mu167af2QpbvD5iD"
+			]
+		},
+		"src/libraries/HashLib.sol": {
+			"keccak256": "0xda21929efb42771a81db51346fb57fbf5b02e0753f59334e51b4a5313a1f5b16",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://89a613d9f236574c3ce9906e2d406c1347be4a4d821c0362b81f1b222b1953eb",
+				"dweb:/ipfs/QmNi5CebeCVYGxKD6fqtb7aeyxRwcea41BsYRF81hbtpQT"
+			]
+		}
+	},
+	"version": 1
+}
