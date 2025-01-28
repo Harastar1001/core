@@ -1,0 +1,113 @@
+{
+	"compiler": {
+		"version": "0.8.28+commit.7893614a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "interfaceHash",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "implementer",
+						"type": "address"
+					}
+				],
+				"name": "setInterfaceImplementer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"src/blueprints/wrappers/ERC20Blueprint.sol": "IERC1820Registry"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": [
+			":ds-test/=lib/solmate/lib/ds-test/src/",
+			":forge-std/=lib/forge-std/src/",
+			":solmate/=lib/solmate/src/"
+		]
+	},
+	"sources": {
+		"lib/solmate/src/tokens/ERC20.sol": {
+			"keccak256": "0xcdfd8db76b2a3415620e4d18cc5545f3d50de792dbf2c3dd5adb40cbe6f94b10",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://57b3ab70cde374af1cf2c9888636e8de6cf660f087b1c9abd805e9271e19fa35",
+				"dweb:/ipfs/QmNrLDBAHYFjpjSd12jerm1AdBkDqEYUUaXgnT854BUZ97"
+			]
+		},
+		"lib/solmate/src/utils/SafeTransferLib.sol": {
+			"keccak256": "0x2725cc1d6f78a6aba23f6b5421f064dea9dfdadeb4689bf987f8962d62383746",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://c94c2cf587af021525b6ef9fa2cf42cf2144b4956d7fb48a9bb4142185d04cf6",
+				"dweb:/ipfs/Qmf5CkSKGwEJVCmFRNK66M6WyCxBU8aPyuhDSTsBeVpsne"
+			]
+		},
+		"src/blueprints/BasicBlueprint.sol": {
+			"keccak256": "0xcfd93fde1f9611cd1cbe4621d78e73ce1f037784e8ba0bca340213d4b75455ec",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://a6c2507efc773918848a465e6ebef16d4ef9ab2e4a61eb5bfdea06e7267a40ac",
+				"dweb:/ipfs/QmS8WEURQs5RURzYcA6dhRF675NAtDHL6vhjbsb55we1ek"
+			]
+		},
+		"src/blueprints/wrappers/ERC20Blueprint.sol": {
+			"keccak256": "0x4cd8935fb4182594f6facec0d97f58a01fcbdc41fc5a4f7ced8312740c488b49",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://40a24fb22b6ffeb5dad85c83c5c2bca66d9db5ec9f0b1b8b8c08d1a17fdc46da",
+				"dweb:/ipfs/QmYmfWAYhGshvE6y6BvMjbPi18A5F8Nca53dFTYJ6P3Nqu"
+			]
+		},
+		"src/interfaces/IBlueprint.sol": {
+			"keccak256": "0x402af28fa9618652cbf3ccba43fa3f105f6507afb56f5693a94a20ff8ee3dd09",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://c9aa4a8c9f694b980b2bbe595ef3c5482ce7e85aff33c465017d8a94b17c6b31",
+				"dweb:/ipfs/QmVTdABvwkaufoUDy6nw7bskA1rH4rRgmx7WWEQFUC2t2T"
+			]
+		},
+		"src/interfaces/IBlueprintManager.sol": {
+			"keccak256": "0x9cccb804b30eff150981e915348933e8a0d001def03bea418146a6fc480a7895",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://e0c858008ce5db7c6b6d041842937184534f49d1ea75600f11040922fb23c754",
+				"dweb:/ipfs/QmUjFRRjVnvbsLshDkNXZVuUrcrLo2Mu167af2QpbvD5iD"
+			]
+		}
+	},
+	"version": 1
+}
